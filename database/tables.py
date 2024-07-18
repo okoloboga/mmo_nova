@@ -1,14 +1,16 @@
 from typing import Annotated
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, DateTime, func
+from sqlalchemy import BigInteger, String, DateTime, Integer, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 # Define types
 tg_id = Annotated[int, mapped_column(BigInteger, primary_key=True)]
 required_short_str = Annotated[str, mapped_column(String(15), nullable=False)]
 optional_str = Annotated[str | None, mapped_column(String, nullable=True)]
-
+required_short_int = Annotated[int, mapped_column(Integer, nullable=False)]
+optional_int = Annotated[int, mapped_column(Integer, nullable=True)]
+required_long_str = Annotated[str, mapped_column(String, nullable=False)]
 
 class Base(DeclarativeBase):
     pass
@@ -21,6 +23,10 @@ class User(Base):
     last_name: Mapped[optional_str]
     location: Mapped[required_short_str]
     destination: Mapped[optional_str]
+    health: Mapped[required_short_int]
+    bioresource: Mapped[required_short_int]
+    crystals: Mapped[required_short_int]
+    equipment: Mapped[required_long_str]
     created_at: Mapped[datetime] = mapped_column(
             DateTime(timezone=True),
             nullable=False,

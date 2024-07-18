@@ -22,7 +22,11 @@ async def create_user(sessionmaker: async_sessionmaker,
     user = User(telegram_id=telegram_id,
                 first_name=first_name,
                 last_name=last_name,
-                location=BASE
+                location=BASE,
+                health=100,
+                bioresourse=0,
+                crystals=0,
+                equipment=START_EQUIPMENT
                 )
     
     async with sessionmaker() as session:
