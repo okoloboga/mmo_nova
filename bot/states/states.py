@@ -17,3 +17,4 @@ class StatsSG(StatesGroup):
     main = State()
     armor = State()
     weapon = State()
+    details = State()

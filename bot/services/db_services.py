@@ -30,7 +30,8 @@ async def create_user(session: AsyncSession,
                 'health': 100,
                 'bioresource': 0,
                 'crystals': 0,
-                'equipment': START_EQUIPMENT
+                'equipment': START_EQUIPMENT,
+                'bag': START_BAG
                 }    
             )
 
@@ -95,5 +96,40 @@ async def get_equipment(session: AsyncSession,
         return None
     
     
+# Unequip item from character to his Bag
+async def unequip_to_bag(session: AsyncSession,
+                         equipment: str,
+                         item: str,
+                         user_id: int):
+
+    equipment_splitted = equipment.split()
+    logger.info(f'User {user_id} unequip {item}, all equipment: {equipment_splitted}')
     
+    # What item is it? Get it by emoji
+    item_type_map = {'🪖': 'h',
+                     '🦺': 'c',
+                     '👞': 'f',
+                     '🎒': 'b',
+                     '1': 'w',
+                     '2': 'w'}
+    unequip_tag = item_type_map[item]
+
+    # Remove item with tag from equipment list and add it to BAG
+    for i in equipment_splitted:
+        if unequip_tag in i:
+            # Target string
+            unequip = i 
+            logger.info(f'Need to unequip {unequip}')
+            equipment_splitted.remove(unequip)
+            equipment = ' '.join(equipment_splitted)
+
+    # Write new equipment to Database
+    logger.info(f'New equipment {equipment}')
     
+    user_stmt = select(User).where(int(user_id) == User.telegram_id)
+
+    async with session:
+        result = await session.execute(user_stmt)
+        user = result.scalar()
+        user.equipment = equipment
+        '''ПРОВЕРЯТЬ, ЕСТЬ ЛИ В BAG МЕСТО, ИНАЧЕ НЕ ПРОИЗВОДИТЬ ОПЕРАЦИЮ'''

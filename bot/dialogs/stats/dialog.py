@@ -42,7 +42,7 @@ stats_dialog = Dialog(
                 items='armor_list',
                 on_click=select_armor
                 ),
-            width=2
+            width=1
             ),
         Button(Format('{button_back}'), id='b_back', on_click=back),
         getter=character_armor_getter,
@@ -55,14 +55,22 @@ stats_dialog = Dialog(
             Select(
                 Format('{item}'),
                 id='weapon',
-                item_id_getter=lambda x: x[0],
+                item_id_getter=lambda x: x[1],
                 items='weapon_list',
                 on_click=select_weapon
                 ),
-            width=2
+            width=1
             ),
         Button(Format('{button_back}'), id='b_back', on_click=back),
         getter=character_weapon_getter,
         state=StatsSG.weapon
-    )
+    ),
+    Window(
+        Format('{equipment_details}'),
+        Button(Format('{button_unequip}'), id='b_unequip', on_click=unequip),
+        Button(Format('{button_back}'), id='b_back', on_click=back),
+        getter=equipment_details_getter,
+        state=StatsSG.details
+        )
+
 )

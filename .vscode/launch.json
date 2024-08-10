@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Run app",
+        "type": "debugpy",
+        "request": "launch",
+        "module": "bot",
+        "python": "${command:python.interpreterPath}",
+        "cwd": "${workspaceFolder}",
+        "env": {
+            "BOT_CONFIG_FILE": "/config.yaml"
+          },
+        "stopOnEntry": false,
+        "console": "integratedTerminal"
+      }
+    ]
+  }

@@ -24,7 +24,7 @@ button-location = Локация
 
 button-armor = Броня
 button-weapon = Оружие
-
+button-unequip = Снять
 button-back = Назад
 
 ###################################################################################
@@ -146,3 +146,25 @@ characters-armor = Броня
 characters-weapon = Оружие
   
 empty = Отсутствует
+
+equipment-details = { $name }
+
+                    { $description }
+                    
+                    Состояние - { $current_health }%
+                    { $effects }
+
+cells-of-bag = ячейки рюкзака
+               2 - кармана
+
+closedamage-describe = Дальний бой
+
+middledamage-describe = Средний бой
+
+rangedamage-describe = Ближний бой
+
+physical-defense-describe = защита от балистического урона
+
+chemical-defense-describe = защита от химического урона
+
+electric-defense-describe = защита от электрического урона

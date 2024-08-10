@@ -29,6 +29,7 @@ class User(Base):
     bioresource: Mapped[required_int]
     crystals: Mapped[required_int]
     equipment: Mapped[required_str]
+    bag: Mapped[required_str]
     created_at: Mapped[datetime] = mapped_column(
             DateTime(timezone=True),
             nullable=False,
