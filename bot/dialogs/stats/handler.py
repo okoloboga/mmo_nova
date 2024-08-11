@@ -64,6 +64,8 @@ async def select_weapon(callback: CallbackQuery,
 
     await dialog_manager.switch_to(StatsSG.details)
 
+
+# Unequip item to Bag
 async def unequip(callback: CallbackQuery,
                   button: Button,
                   dialog_manager: DialogManager):
@@ -72,8 +74,14 @@ async def unequip(callback: CallbackQuery,
     item = dialog_manager.current_context().dialog_data['selected_item']
     equipment = dialog_manager.current_context().dialog_data['equipment']
     session = dialog_manager.middleware_data.get('session')
+    i18n: TranslatorRunner = dialog_manager.middleware_data.get('i18n')
+    
+    logger.info(f'User {user_id} want to unequip his {item}')
+    result = await unequip_to_bag(session, equipment, item, user_id, i18n)
 
-    await unequip_to_bag(session, equipment, item, user_id)
+    await callback.message.answer(text=result)
+
+    
 
 
 

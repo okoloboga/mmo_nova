@@ -1,8 +1,10 @@
 import asyncio
 import logging
 
+from fluentogram import TranslatorRunner
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import select
 from database import User, Equipment
 from .constants import *
 from .classes import ItemEquipment
@@ -100,7 +102,8 @@ async def get_equipment(session: AsyncSession,
 async def unequip_to_bag(session: AsyncSession,
                          equipment: str,
                          item: str,
-                         user_id: int):
+                         user_id: int,
+                         i18n: TranslatorRunner):
 
     equipment_splitted = equipment.split()
     logger.info(f'User {user_id} unequip {item}, all equipment: {equipment_splitted}')
@@ -124,12 +127,27 @@ async def unequip_to_bag(session: AsyncSession,
             equipment = ' '.join(equipment_splitted)
 
     # Write new equipment to Database
-    logger.info(f'New equipment {equipment}')
+    logger.info(f'New equipment state {equipment}')
     
     user_stmt = select(User).where(int(user_id) == User.telegram_id)
 
     async with session:
         result = await session.execute(user_stmt)
         user = result.scalar()
-        user.equipment = equipment
-        '''ПРОВЕРЯТЬ, ЕСТЬ ЛИ В BAG МЕСТО, ИНАЧЕ НЕ ПРОИЗВОДИТЬ ОПЕРАЦИЮ'''
+        
+        user_bag = (user.bag).split()
+        logger.info(f'User bag state is: {user_bag}')
+        if int(user_bag[0]) >= len(user_bag):
+            # At least - one place is empty
+            user.bag = user.bag + ' ' + unequip
+            user.equipment = equipment
+            await session.commit()
+            return i18n.unequip.success()
+        else:
+            return i18n.unequip.unsuccess() 
+
+
+
+
+
+
